@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+
+<sdf version="1.9">
+
+    <world name="rov_world">
+
+        <!-- Physics engine -->
+        <physics name="default_physics"
+                 type="ode">
+
+            <max_step_size>0.001</max_step_size>
+
+            <real_time_factor>1.0</real_time_factor>
+
+            <real_time_update_rate>1000</real_time_update_rate>
+
+        </physics>
+
+
+        <!-- Gravity -->
+        <gravity>0 0 -9.81</gravity>
+
+
+        <!-- Physics system -->
+        <plugin
+            filename="gz-sim-physics-system"
+            name="gz::sim::systems::Physics">
+        </plugin>
+
+
+        <!-- User commands -->
+        <plugin
+            filename="gz-sim-user-commands-system"
+            name="gz::sim::systems::UserCommands">
+        </plugin>
+
+
+        <!-- Scene broadcaster -->
+        <plugin
+            filename="gz-sim-scene-broadcaster-system"
+            name="gz::sim::systems::SceneBroadcaster">
+        </plugin>
+
+
+        <!-- Environment -->
+        <model name="environment">
+
+            <static>true</static>
+
+            <link name="environment_link">
+
+                <visual name="environment_visual">
+
+                    <geometry>
+                        <mesh>
+                            <uri>../meshes/environment.dae</uri>
+                        </mesh>
+                    </geometry>
+
+                </visual>
+
+                <collision name="environment_collision">
+
+                    <geometry>
+                        <mesh>
+                            <uri>../meshes/envir-4.dae</uri>
+                        </mesh>
+                    </geometry>
+
+                </collision>
+
+            </link>
+
+        </model>
+
+
+        <!-- Lighting -->
+        <light name="sun" type="directional">
+
+            <cast_shadows>true</cast_shadows>
+
+            <pose>0 0 10 0 0 0</pose>
+
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+
+            <specular>0.2 0.2 0.2 1</specular>
+
+            <direction>-0.5 0.5 -1</direction>
+
+        </light>
+
+
+    </world>
+
+</sdf>
