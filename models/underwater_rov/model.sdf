@@ -1,0 +1,300 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <model name="underwater_rov">
+    <pose>0 0 0 0 0 0</pose>
+
+    <!-- ========================================== -->
+    <!-- BASE LINK (CHASSIS & PRESSURE HULL)        -->
+    <!-- ========================================== -->
+    <link name="base_link">
+      <inertial>
+        <mass>6.49</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.085</ixx>
+          <ixy>0.0</ixy>
+          <ixz>0.0</ixz>
+          <iyy>0.142</iyy>
+          <iyz>0.0</iyz>
+          <izz>0.155</izz>
+        </inertia>
+      </inertial>
+
+      <collision name="hull_collision">
+        <pose>0 0 0 0 1.570796 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.45</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <visual name="hull_visual">
+        <pose>0 0 0 0 1.570796 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.05</radius>
+            <length>0.45</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.7 0.8 0.9 0.4</ambient>
+          <diffuse>0.7 0.8 0.9 0.4</diffuse>
+          <specular>0.9 0.9 0.9 0.8</specular>
+        </material>
+      </visual>
+
+      <collision name="foam_collision">
+        <pose>0 0 0.12 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.35 0.25 0.08</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="foam_visual">
+        <pose>0 0 0.12 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.35 0.25 0.08</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>1.0 0.5 0.0 1.0</ambient>
+          <diffuse>1.0 0.5 0.0 1.0</diffuse>
+        </material>
+      </visual>
+    </link>
+
+    <!-- ========================================== -->
+    <!-- CAMERA LINK                                -->
+    <!-- ========================================== -->
+    <link name="camera_link">
+      <pose>0.24 0 0 0 0 0</pose>
+      <inertial>
+        <mass>0.2</mass>
+        <inertia>
+          <ixx>0.0001</ixx><ixy>0.0</ixy><ixz>0.0</ixz>
+          <iyy>0.0001</iyy><iyz>0.0</iyz><izz>0.0001</izz>
+        </inertia>
+      </inertial>
+      <collision name="camera_collision">
+        <geometry><box><size>0.04 0.08 0.04</size></box></geometry>
+      </collision>
+      <visual name="camera_visual">
+        <geometry><box><size>0.04 0.08 0.04</size></box></geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1.0</ambient>
+          <diffuse>0.1 0.1 0.1 1.0</diffuse>
+        </material>
+      </visual>
+
+      <sensor name="underwater_camera" type="camera">
+        <pose>0 0 0 0 0 0</pose>
+        <camera>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image>
+            <width>1280</width>
+            <height>720</height>
+            <format>RGB_INT8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>100.0</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>true</visualize>
+        <topic>/rov/camera/image_raw</topic>
+      </sensor>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>camera_link</child>
+    </joint>
+
+    <!-- ========================================== -->
+    <!-- 6 THRUSTER ASSEMBLIES                      -->
+    <!-- ========================================== -->
+
+    <!-- Thruster 1: Vertical Front Right -->
+    <link name="thruster_1_link">
+      <pose>0.15 -0.15 -0.1 0 1.570796 0</pose>
+      <inertial>
+        <mass>0.35</mass>
+        <inertia><ixx>0.001</ixx><iyy>0.001</iyy><izz>0.001</izz></inertia>
+      </inertial>
+      <collision name="t1_collision"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry></collision>
+      <visual name="t1_visual"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry><material><ambient>0.8 0.1 0.1 1</ambient></material></visual>
+    </link>
+    <joint name="thruster_1_joint" type="revolute">
+      <parent>base_link</parent><child>thruster_1_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e16</lower><upper>1e16</upper><effort>30</effort><velocity>10</velocity></limit>
+      </axis>
+    </joint>
+
+    <!-- Thruster 2: Vertical Front Left -->
+    <link name="thruster_2_link">
+      <pose>0.15 0.15 -0.1 0 1.570796 0</pose>
+      <inertial>
+        <mass>0.35</mass>
+        <inertia><ixx>0.001</ixx><iyy>0.001</iyy><izz>0.001</izz></inertia>
+      </inertial>
+      <collision name="t2_collision"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry></collision>
+      <visual name="t2_visual"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry><material><ambient>0.8 0.1 0.1 1</ambient></material></visual>
+    </link>
+    <joint name="thruster_2_joint" type="revolute">
+      <parent>base_link</parent><child>thruster_2_link</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit><lower>-1e16</lower><upper>1e16</upper><effort>30</effort><velocity>10</velocity></limit>
+      </axis>
+    </joint>
+
+    <!-- Thruster 3: Horizontal Rear Right -->
+    <link name="thruster_3_link">
+      <pose>-0.18 -0.18 0 0 0 0</pose>
+      <inertial>
+        <mass>0.35</mass>
+        <inertia><ixx>0.001</ixx><iyy>0.001</iyy><izz>0.001</izz></inertia>
+      </inertial>
+      <collision name="t3_collision"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry></collision>
+      <visual name="t3_visual"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry><material><ambient>0.1 0.8 0.1 1</ambient></material></visual>
+    </link>
+    <joint name="thruster_3_joint" type="revolute">
+      <parent>base_link</parent><child>thruster_3_link</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit><lower>-1e16</lower><upper>1e16</upper><effort>30</effort><velocity>10</velocity></limit>
+      </axis>
+    </joint>
+
+    <!-- Thruster 4: Horizontal Rear Left -->
+    <link name="thruster_4_link">
+      <pose>-0.18 0.18 0 0 0 0</pose>
+      <inertial>
+        <mass>0.35</mass>
+        <inertia><ixx>0.001</ixx><iyy>0.001</iyy><izz>0.001</izz></inertia>
+      </inertial>
+      <collision name="t4_collision"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry></collision>
+      <visual name="t4_visual"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry><material><ambient>0.1 0.8 0.1 1</ambient></material></visual>
+    </link>
+    <joint name="thruster_4_joint" type="revolute">
+      <parent>base_link</parent><child>thruster_4_link</child>
+      <axis>
+        <xyz>1 0 0</xyz>
+        <limit><lower>-1e16</lower><upper>1e16</upper><effort>30</effort><velocity>10</velocity></limit>
+      </axis>
+    </joint>
+
+    <!-- Thruster 5: Lateral Front -->
+    <link name="thruster_5_link">
+      <pose>0.2 0 0 0 0 1.570796</pose>
+      <inertial>
+        <mass>0.35</mass>
+        <inertia><ixx>0.001</ixx><iyy>0.001</iyy><izz>0.001</izz></inertia>
+      </inertial>
+      <collision name="t5_collision"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry></collision>
+      <visual name="t5_visual"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry><material><ambient>0.1 0.1 0.8 1</ambient></material></visual>
+    </link>
+    <joint name="thruster_5_joint" type="revolute">
+      <parent>base_link</parent><child>thruster_5_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit><lower>-1e16</lower><upper>1e16</upper><effort>25</effort><velocity>10</velocity></limit>
+      </axis>
+    </joint>
+
+    <!-- Thruster 6: Lateral Rear -->
+    <link name="thruster_6_link">
+      <pose>-0.2 0 0 0 0 1.570796</pose>
+      <inertial>
+        <mass>0.35</mass>
+        <inertia><ixx>0.001</ixx><iyy>0.001</iyy><izz>0.001</izz></inertia>
+      </inertial>
+      <collision name="t6_collision"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry></collision>
+      <visual name="t6_visual"><geometry><cylinder><radius>0.035</radius><length>0.1</length></cylinder></geometry><material><ambient>0.1 0.1 0.8 1</ambient></material></visual>
+    </link>
+    <joint name="thruster_6_joint" type="revolute">
+      <parent>base_link</parent><child>thruster_6_link</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit><lower>-1e16</lower><upper>1e16</upper><effort>25</effort><velocity>10</velocity></limit>
+      </axis>
+    </joint>
+
+    <!-- ========================================== -->
+    <!-- GAZEBO SIM 8 THRUSTER PLUGINS              -->
+    <!-- ========================================== -->
+    <plugin filename="gz-sim-thruster-system" name="gz::sim::systems::Thruster">
+      <namespace>rov</namespace>
+      <joint_name>thruster_1_joint</joint_name>
+      <fluid_density>1000.0</fluid_density>
+      <propeller_diameter>0.07</propeller_diameter>
+      <thrust_coefficient>0.01</thrust_coefficient>
+      <max_thrust_cmd>30.0</max_thrust_cmd>
+      <min_thrust_cmd>-20.0</min_thrust_cmd>
+    </plugin>
+
+    <plugin filename="gz-sim-thruster-system" name="gz::sim::systems::Thruster">
+      <namespace>rov</namespace>
+      <joint_name>thruster_2_joint</joint_name>
+      <fluid_density>1000.0</fluid_density>
+      <propeller_diameter>0.07</propeller_diameter>
+      <thrust_coefficient>0.01</thrust_coefficient>
+      <max_thrust_cmd>30.0</max_thrust_cmd>
+      <min_thrust_cmd>-20.0</min_thrust_cmd>
+    </plugin>
+
+    <plugin filename="gz-sim-thruster-system" name="gz::sim::systems::Thruster">
+      <namespace>rov</namespace>
+      <joint_name>thruster_3_joint</joint_name>
+      <fluid_density>1000.0</fluid_density>
+      <propeller_diameter>0.07</propeller_diameter>
+      <thrust_coefficient>0.01</thrust_coefficient>
+      <max_thrust_cmd>30.0</max_thrust_cmd>
+      <min_thrust_cmd>-20.0</min_thrust_cmd>
+    </plugin>
+
+    <plugin filename="gz-sim-thruster-system" name="gz::sim::systems::Thruster">
+      <namespace>rov</namespace>
+      <joint_name>thruster_4_joint</joint_name>
+      <fluid_density>1000.0</fluid_density>
+      <propeller_diameter>0.07</propeller_diameter>
+      <thrust_coefficient>0.01</thrust_coefficient>
+      <max_thrust_cmd>30.0</max_thrust_cmd>
+      <min_thrust_cmd>-20.0</min_thrust_cmd>
+    </plugin>
+
+    <plugin filename="gz-sim-thruster-system" name="gz::sim::systems::Thruster">
+      <namespace>rov</namespace>
+      <joint_name>thruster_5_joint</joint_name>
+      <fluid_density>1000.0</fluid_density>
+      <propeller_diameter>0.07</propeller_diameter>
+      <thrust_coefficient>0.01</thrust_coefficient>
+      <max_thrust_cmd>25.0</max_thrust_cmd>
+      <min_thrust_cmd>-25.0</min_thrust_cmd>
+    </plugin>
+
+    <plugin filename="gz-sim-thruster-system" name="gz::sim::systems::Thruster">
+      <namespace>rov</namespace>
+      <joint_name>thruster_6_joint</joint_name>
+      <fluid_density>1000.0</fluid_density>
+      <propeller_diameter>0.07</propeller_diameter>
+      <thrust_coefficient>0.01</thrust_coefficient>
+      <max_thrust_cmd>25.0</max_thrust_cmd>
+      <min_thrust_cmd>-25.0</min_thrust_cmd>
+    </plugin>
+
+  </model>
+</sdf>
