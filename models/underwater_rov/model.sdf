@@ -8,8 +8,8 @@
     <!-- ========================================== -->
     <link name="base_link">
       <inertial>
-        <!-- Mass: 6.49 kg -->
-        <mass>6.49</mass>
+        <!-- Mass: 6.175kg -->
+        <mass>6.175</mass>
         <!-- Center of Mass shifted slightly DOWN (z = -0.03) for pendulum stability -->
         <pose>0 0 -0.03 0 0 0</pose>
         <inertia>
