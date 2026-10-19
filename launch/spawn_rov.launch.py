@@ -60,8 +60,22 @@ def generate_launch_description():
         ]
     )
 
+    # 4. Automatically launch rqt_image_view targeting your camera topic
+    start_rqt = TimerAction(
+        period=7.0,
+        actions=[
+            Node(
+                package='rqt_image_view',
+                executable='rqt_image_view',
+                arguments=['/rov/camera/image_raw'],
+                output='screen'
+            )
+        ]
+    )
+
     return LaunchDescription([
         gazebo,
         bridge,
-        spawn_rov
+        spawn_rov,
+        start_rqt   
     ])
